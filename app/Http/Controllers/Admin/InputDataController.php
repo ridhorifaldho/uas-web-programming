@@ -184,7 +184,53 @@ class InputDataController extends Controller
 
     public function getDatasDua($value)
     {
-        $dataDuass = DataDua::where('nama', 'LIKE',  $value.'%' )->pluck("nama","id");
-        return json_encode($dataDuass);
+        $myArray = explode(',', $value);
+        $dataDuass = DataDua::query();
+        foreach($myArray as $word){
+            $dataDuass->orWhere('nama', 'LIKE', $word.'%');
+        }
+        $dataDua = $dataDuass->pluck("nama","id");
+        return json_encode($dataDua);
+    }
+
+    public function getDatasDuaByID($value)
+    {
+        $myArray = explode(',', $value);
+        $data = DataDua::whereIn('id',  $myArray)->pluck("nama","id");
+//        dump($myArray);
+//        dump($dataDuass);
+        return json_encode($data);
+    }
+
+    public function getDatasTiga($value)
+    {
+        $myArray = explode(',', $value);
+        $dataTigass = DataTiga::query();
+        foreach($myArray as $word){
+            $dataTigass->orWhere('nama', 'LIKE', $word.'%');
+        }
+        $dataTiga = $dataTigass->pluck("nama","id");
+        return json_encode($dataTiga);
+    }
+
+    public function getDatasTigaByID($value)
+    {
+        $myArray = explode(',', $value);
+        $data = DataTiga::whereIn('id',  $myArray)->pluck("nama","id");
+//        dump($myArray);
+//        dump($dataDuass);
+        return json_encode($data);
+    }
+
+
+    public function getDatasEmpat($value)
+    {
+        $myArray = explode(',', $value);
+        $data = DataEmpat::query();
+        foreach($myArray as $word){
+            $data->orWhere('nama', 'LIKE', $word.'%');
+        }
+        $dataFix = $data->pluck("nama","id");
+        return json_encode($dataFix);
     }
 }

@@ -62,9 +62,9 @@
                     <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
                 </div>
                 <select class="form-control select2 {{ $errors->has('data_tigas') ? 'is-invalid' : '' }}" name="data_tigas[]" id="data_tigas" multiple required>
-                    @foreach($data_tigas as $id => $data_tiga)
-                        <option value="{{ $id }}" {{ in_array($id, old('data_tigas', [])) ? 'selected' : '' }}>{{ $data_tiga }}</option>
-                    @endforeach
+{{--                    @foreach($data_tigas as $id => $data_tiga)--}}
+{{--                        <option value="{{ $id }}" {{ in_array($id, old('data_tigas', [])) ? 'selected' : '' }}>{{ $data_tiga }}</option>--}}
+{{--                    @endforeach--}}
                 </select>
                 @if($errors->has('data_tigas'))
                     <div class="invalid-feedback">
@@ -80,9 +80,9 @@
                     <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
                 </div>
                 <select class="form-control select2 {{ $errors->has('data_empats') ? 'is-invalid' : '' }}" name="data_empats[]" id="data_empats" multiple required>
-                    @foreach($data_empats as $id => $data_empat)
-                        <option value="{{ $id }}" {{ in_array($id, old('data_empats', [])) ? 'selected' : '' }}>{{ $data_empat }}</option>
-                    @endforeach
+{{--                    @foreach($data_empats as $id => $data_empat)--}}
+{{--                        <option value="{{ $id }}" {{ in_array($id, old('data_empats', [])) ? 'selected' : '' }}>{{ $data_empat }}</option>--}}
+{{--                    @endforeach--}}
                 </select>
                 @if($errors->has('data_empats'))
                     <div class="invalid-feedback">
@@ -105,93 +105,136 @@
 <script type="text/javascript">
     jQuery(document).ready(function ()
     {
-    var myResponse = [];
-        var categoryID = [];
+        var myResponse = [];
+        var valuePertamaID = [];
+        var valueKeduaID = [];
+        var valueKetigaID = [];
         var namaDataSatu =[];
+        var namaDataDua = [];
+        var namaDataDuaByID =[];
+        var namaDataTigaByID = [];
 
-        $("#data_satus").change(function() {categoryID = jQuery(this).val();
-                // if(this.checked) {
-                //     valuePertamaArr.push(jQuery(this).val());
-                // }
-
-            // var name = ''
-            // if(categoryID == 2){
-            //     name = 'satu'
-            // }else if(categoryID == 3) {
-            //     name = 'dua'
-            // }else {
-            //     name = 'tiga'
-            // }
-            // if(categoryID)
-            // {
+        $("#data_satus").change(function() {valuePertamaID = jQuery(this).val();
+            namaDataSatu = [];
+            // namaDataDua = [];
                 jQuery.ajax({
-                    url : 'getDatasSatu/' + categoryID,
+                    url : 'getDatasSatu/' + valuePertamaID,
                     type : "GET",
                     dataType : "json",
                     success:function(response)
                     {
-                        // cobaData = data;
-                        // myResponse = response;
                         if(response){
                             myResponse = response
                             $.each(response, function(key, course){
-                                console.log("INI KEY",key)
-                                namaDataSatu = course;
-
-                                // $('select[name="course"]').append('<option value="'+ key +'">' + course.name+ '</option>');
+                                console.log("INI KEY",course)
+                                namaDataSatu.push(course);
+                                console.log("DAH AH",namaDataSatu)
                             });
 
+                            console.log(namaDataSatu,"DZUL PI KAR")
                             jQuery.ajax({
-                                url : '1getDatasDua/' + namaDataSatu,
+                                url : 'getDatasDua/' + namaDataSatu,
                                 type : "GET",
                                 dataType : "json",
                                 success:function(responseNew)
                                 {
-                                    // cobaData = data;
-                                    // myResponse = response;
                                     if(responseNew){
                                         console.log("KAWOAWKOAWKO",responseNew);
-                                        // $.each(responseNew, function(key, course){
-                                        //     console.log("INI KEY1",key)
-                                        //     console.log("INI course1",course)
-                                        //     $('select[id="data_duas"]').append('<option value="'+ key +'">' + course+ '</option>');
-                                        // });
+                                        jQuery('select[id="data_duas"]').empty();
+                                        jQuery.each(responseNew, function(key,value){
+                                            $('select[id="data_duas"]').append('<option value="'+ key +'">'+ value +'</option>');
+                                        });
                                     }
-
-                                    // console.log(,"HAH")
-                                    // jQuery('select[id="data_duas"]').empty();
+                                    else
+                                    {
+                                        $('select[id="data_duas"]').empty();
+                                    }
                                 }
                             });
-                            // console.log(response.nama,"CUK")
                         }
-
-                        // console.log(,"HAH")
-                        // jQuery('select[id="data_duas"]').empty();
                     }
                 });
-            // }
-            // else
-            // {
-
-            // console.log("WKWKW",url);
-            //     $('select[id="data_duas"]').empty();
-            // }
-
-            // jQuery.ajax({
-            //     url : 'getDatasDua/' + ,
-            //     type : "GET",
-            //     dataType : "json",
-            //     success:function(response)
-            //     {
-            //         // cobaData = data;
-            //         myResponse = response;
-            //         console.log(response,"HAH")
-            //         // jQuery('select[id="data_duas"]').empty();
-            //     }
-            // });
-
             console.log(namaDataSatu,"HEHEH",myResponse)
+        });
 
+        jQuery('select[id="data_duas"]').change(function() {valueKeduaID = jQuery(this).val();
+            namaDataDuaByID = [];
+            // namaDataDua = [];
+            jQuery.ajax({
+                url : 'getDatasDuaByID/' + valueKeduaID,
+                type : "GET",
+                dataType : "json",
+                success:function(response)
+                {
+                    if(response){
+                        myResponse = response
+                        $.each(response, function(key, value){
+                            namaDataDuaByID.push(value);
+                        });
+                        console.log(namaDataDuaByID,"hohehohe")
+
+                        jQuery.ajax({
+                            url : 'getDatasTiga/' + namaDataDuaByID,
+                            type : "GET",
+                            dataType : "json",
+                            success:function(responseNew)
+                            {
+                                if(responseNew){
+                                    console.log("KAWOAWKOAWKO",responseNew);
+                                    jQuery('select[id="data_tigas"]').empty();
+                                    jQuery.each(responseNew, function(key,value){
+                                        $('select[id="data_tigas"]').append('<option value="'+ key +'">'+ value +'</option>');
+                                    });
+                                }
+                                else
+                                {
+                                    $('select[id="data_tigas"]').empty();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        jQuery('select[id="data_tigas"]').change(function() {valueKetigaID = jQuery(this).val();
+            namaDataTigaByID = [];
+            // namaDataDua = [];
+            jQuery.ajax({
+                url : 'getDatasTigaByID/' + valueKetigaID,
+                type : "GET",
+                dataType : "json",
+                success:function(response)
+                {
+                    if(response){
+                        myResponse = response
+                        $.each(response, function(key, value){
+                            namaDataTigaByID.push(value);
+                        });
+                        console.log(namaDataTigaByID,"WOIWOIOWWOIWOI")
+
+                        jQuery.ajax({
+                            url : 'getDatasEmpat/' + namaDataTigaByID,
+                            type : "GET",
+                            dataType : "json",
+                            success:function(responseNew)
+                            {
+                                if(responseNew){
+                                    console.log("KAWOAWKOAWKO",responseNew);
+                                    jQuery('select[id="data_empats"]').empty();
+                                    jQuery.each(responseNew, function(key,value){
+                                        $('select[id="data_empats"]').append('<option value="'+ key +'">'+ value +'</option>');
+                                    });
+                                }
+                                else
+                                {
+                                    $('select[id="data_empats"]').empty();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         });
 
     });

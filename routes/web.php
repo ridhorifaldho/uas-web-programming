@@ -59,6 +59,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('input-datas/process-csv-import', 'InputDataController@processCsvImport')->name('input-datas.processCsvImport');
     Route::get('input-datas/getDatasSatu/{value}', 'InputDataController@getDatasSatu')->name('input-datas.getDatasSatu');
     Route::get('input-datas/getDatasDua/{value}', 'InputDataController@getDatasDua')->name('input-datas.getDatasDua');
+    Route::get('input-datas/getDatasDuaByID/{value}', 'InputDataController@getDatasDuaByID')->name('input-datas.getDatasDuaByID');
+    Route::get('input-datas/getDatasTiga/{value}', 'InputDataController@getDatasTiga')->name('input-datas.getDatasTiga');
+    Route::get('input-datas/getDatasTigaByID/{value}', 'InputDataController@getDatasTigaByID')->name('input-datas.getDatasTigaByID');
+    Route::get('input-datas/getDatasEmpat/{value}', 'InputDataController@getDatasEmpat')->name('input-datas.getDatasEmpat');
     Route::resource('input-datas', 'InputDataController');
 
     Route::get('team-members', 'TeamMembersController@index')->name('team-members.index');
